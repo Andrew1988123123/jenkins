@@ -9,26 +9,32 @@ pipeline {
     }
 
     stages {
-        container('maven') {
-            stage('Run maven1') {
-                steps {
+        stage('Run maven1') {
+            steps {
+                container('maven') {
                     sh 'mvn -version'
                 }
             }
         }
+
         stage('Run maven2') {
             steps {
-                sh 'mvn -version'
+                container('maven') {
+                    sh 'mvn -version'
+                }
             }
         }
 
         stage('Run maven3') {
             steps {
-                sh 'mvn -version'
+                container('maven') {
+                    sh 'mvn -version'
+                }
             }
         }
     }
 }
+
 //
 //pipeline {
 //    agent {
