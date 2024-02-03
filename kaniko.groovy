@@ -9,19 +9,19 @@ pipeline {
     }
 
     stages {
-        stage('Run maven') {
+        stage('Run maven1') {
             steps {
                 sh 'mvn -version'
             }
         }
 
-        stage('Run maven') {
+        stage('Run maven2') {
             steps {
                 sh 'mvn -version'
             }
         }
 
-        stage('Run maven') {
+        stage('Run maven3') {
             steps {
                 sh 'mvn -version'
             }
