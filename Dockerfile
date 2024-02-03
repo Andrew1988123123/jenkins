@@ -21,7 +21,7 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | b
 
 # Install SDKMAN, Java, and Maven
 RUN curl -s "https://get.sdkman.io" | bash \
-    && /bin/bash -c "source \"$HOME/.sdkman/bin/sdkman-init.sh\""
+    && /bin/bash -c "source \"root/.sdkman/bin/sdkman-init.sh\""
 
 
 # Set environment variables
