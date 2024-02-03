@@ -1,3 +1,4 @@
+def DOCKER_REGISTRY = '74734589924'
 pipeline {
     agent {
         kubernetes {
@@ -5,7 +6,6 @@ pipeline {
             yamlFile 'kaniko.yaml'
         }
     }
-    def DOCKER_REGISTRY = '74734589924'
 
     stage('Get a Maven project') {
         git url: 'https://github.com/scriptcamp/kubernetes-kaniko.git', branch: 'main'
