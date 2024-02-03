@@ -9,12 +9,13 @@ pipeline {
     }
 
     stages {
-        stage('Run maven1') {
-            steps {
-                sh 'mvn -version'
+        container('maven') {
+            stage('Run maven1') {
+                steps {
+                    sh 'mvn -version'
+                }
             }
         }
-
         stage('Run maven2') {
             steps {
                 sh 'mvn -version'
