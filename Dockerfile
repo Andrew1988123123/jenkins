@@ -12,12 +12,6 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Add a user
-RUN useradd -m myuser && chown -R myuser:myuser /home/myuser
-
-# Switch to the new user
-USER myuser
-
 # Install NVM and Node.js
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash \
     && /bin/bash -c "source \"$HOME/.nvm/nvm.sh\" \
@@ -31,6 +25,7 @@ RUN curl -s "https://get.sdkman.io" | bash \
     && sdk install java $JAVA_VERSION \
     && sdk install maven $MAVEN_VERSION"
 
+
 # Set environment variables
 ENV JAVA_HOME="$HOME/.sdkman/candidates/java/current"
 ENV MAVEN_HOME="$HOME/.sdkman/candidates/maven/current"
@@ -38,10 +33,4 @@ ENV NODE_HOME="$HOME/.nvm/versions/node/$NODE_VERSION"
 ENV NPM_HOME="$NODE_HOME/lib/node_modules"
 
 # Combine the specified PATH components
-ENV PATH="$MAVEN_HOME/bin:$JAVA_HOME/bin:$NODE_HOME/bin:$NPM_HOME/bin:/home/myuser/.sdkman/candidates/java/current/bin:/home/myuser/.sdkman/candidates/maven/current/bin:/home/myuser/.nvm/versions/node/v$NODE_VERSION/bin:/home/myuser/.nvm/versions/node/v$NODE_VERSION/lib/node_modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
-
-# Copy contents from the host's "workspace" directory to the image
-COPY workspace /app
-
-# Set the working directory to /app
-WORKDIR /app
+ENV PATH="$MAVEN_HOME/bin:$JAVA_HOME/bin:$NODE_HOME/bin:$NPM_HOME/bin:/root/.sdkman/candidates/java/current/bin:/root/.sdkman/candidates/maven/current/bin:/root/.nvm/versions/node/v$NODE_VERSION/bin:/.sdkman/candidates/java/current/bin:/.sdkman/candidates/maven/current/bin:/.nvm/versions/node/$NODE_VERSION/bin:/.nvm/versions/node/$NODE_VERSION/lib/node_modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
