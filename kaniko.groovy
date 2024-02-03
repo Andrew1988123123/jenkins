@@ -39,8 +39,11 @@ pipeline {
                 container('kaniko') {
                     sh """
             /kaniko/executor --context `pwd` \
+                             --dockerfile=Dockerfile \
                              --cache=false \
-                             --verbosity=debug \
+                             --verbosity=info \
+                             --log-format=color \
+                             --log-timestamp=true \
                              --destination=${DOCKER_REGISTRY}/hello-kaniko:1.0
                        """
                 }
