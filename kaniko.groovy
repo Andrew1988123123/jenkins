@@ -29,18 +29,11 @@ pipeline {
         stage('Build kaniko') {
             steps {
                 git url: 'https://github.com/Andrew1988123123/jenkins.git', branch: 'main'
-                container('kaniko') {
+
                     sh """
-                             ls -la
-            /kaniko/executor --context=git://github.com/Andrew1988123123/jenkins.git \
-                             --dockerfile=Dockerfile \
-                             --cache=false \
-                             --verbosity=info \
-                             --log-format=color \
-                             --log-timestamp=true \
-                             --destination=${DOCKER_REGISTRY}/hello-kaniko:1.1
+                             mvn -v
                        """
-                }
+
             }
         }
 
