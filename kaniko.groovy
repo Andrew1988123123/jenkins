@@ -31,7 +31,7 @@ pipeline {
                 container('kaniko') {
                     sh """
                              ls -la
-            /kaniko/executor --context `pwd` \
+            /kaniko/executor --context=git://github.com/Andrew1988123123/jenkins.git' \
                              --dockerfile=Dockerfile \
                              --cache=false \
                              --verbosity=info \
