@@ -10,7 +10,18 @@ pipeline {
 
     stages {
         stage('Run maven') {
-            git url: 'https://github.com/scriptcamp/kubernetes-kaniko.git', branch: 'main'
+            steps {
+                sh 'mvn -version'
+            }
+        }
+
+        stage('Run maven') {
+            steps {
+                sh 'mvn -version'
+            }
+        }
+
+        stage('Run maven') {
             steps {
                 sh 'mvn -version'
             }
