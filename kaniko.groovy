@@ -1,3 +1,4 @@
+def DOCKER_REGISTRY = '74734589924'
 pipeline {
     agent {
         kubernetes {
@@ -7,15 +8,19 @@ pipeline {
     }
 
     stages {
-        stage('Run maven') {
-            steps {
-                sh 'mvn -version'
+        stage('Get a Maven project') {
+            git url: 'https://github.com/scriptcamp/kubernetes-kaniko.git', branch: 'main'
+            container('maven') {
+                stage('Build a Maven project') {
+                    sh '''
+                        echo pwd
+                        '''
+                }
             }
         }
     }
 }
 
-//def DOCKER_REGISTRY = '74734589924'
 //pipeline {
 //    agent {
 //        kubernetes {
