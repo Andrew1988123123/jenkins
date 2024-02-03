@@ -13,7 +13,7 @@ pipeline {
             steps {
                 git url: 'https://github.com/scriptcamp/kubernetes-kaniko.git', branch: 'main'
                 container('maven') {
-                    sh 'echo pwd'
+                    sh 'echo `pwd`'
                 }
             }
         }
@@ -30,6 +30,7 @@ pipeline {
             steps {
                 container('kaniko') {
                     sh """
+                             ls -la
             /kaniko/executor --context=git://github.com/Andrew1988123123/jenkins.git \
                              --dockerfile=Dockerfile \
                              --cache=false \
