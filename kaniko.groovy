@@ -9,7 +9,7 @@ pipeline {
     }
 
     stages {
-        stage('Run maven1') {
+        stage('Run git') {
             steps {
                 git url: 'https://github.com/scriptcamp/kubernetes-kaniko.git', branch: 'main'
                 container('maven') {
@@ -18,15 +18,32 @@ pipeline {
             }
         }
 
-        stage('Run maven2') {
+        stage('Run maven') {
             steps {
-                container('maven') {
+
                     sh 'ls -la'
+
+            }
+        }
+
+        stage('Build kaniko') {
+            steps {
+                container('kaniko') {
+                    sh """
+                             ls -la
+            /kaniko/executor --context `pwd` \
+                             --dockerfile=Dockerfile \
+                             --cache=false \
+                             --verbosity=info \
+                             --log-format=color \
+                             --log-timestamp=true \
+                             --destination=${DOCKER_REGISTRY}/hello-kaniko:1.1
+                       """
                 }
             }
         }
 
-        stage('Run maven3') {
+        stage('Run kaniko') {
             steps {
                 container('kaniko') {
                     sh """
