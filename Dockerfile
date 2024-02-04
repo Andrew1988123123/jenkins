@@ -1,4 +1,4 @@
-FROM debian:stretch-slim
+FROM debian:stable-slim
 
 # Defining default Java and Maven version
 ARG JAVA_VERSION="11.0.6-amzn"
