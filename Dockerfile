@@ -1,5 +1,5 @@
 # Use a Debian-based image with Maven, Node.js, Java, and Maven
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 # Define versions
 ENV NODE_VERSION=14.20.0
