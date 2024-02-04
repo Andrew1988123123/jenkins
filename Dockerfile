@@ -1,46 +1,36 @@
-FROM debian:stable-slim
+# Use a Debian-based image with Maven, Node.js, Java, and Maven
+FROM ubuntu:20.04
 
-# Defining default Java and Maven version
-ARG JAVA_VERSION="11.0.6-amzn"
-ARG MAVEN_VERSION="3.6.2"
+# Define versions
+ENV NODE_VERSION=14.20.0
+ENV JAVA_VERSION=11.0.22-amzn
+ENV MAVEN_VERSION=3.6.3
 
-# Defining default non-root user UID, GID, and name
-ARG USER_UID="1000"
-ARG USER_GID="1000"
-ARG USER_NAME="jenkins"
+# Install necessary packages
+RUN apt-get update \
+    && apt-get install -y curl wget unzip zip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Creating default non-user
-RUN groupadd -g $USER_GID $USER_NAME && \
-    useradd -m -g $USER_GID -u $USER_UID $USER_NAME
+# Install NVM and Node.js
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash \
+    && /bin/bash -c "source \"$HOME/.nvm/nvm.sh\" \
+    && nvm install $NODE_VERSION \
+    && nvm use $NODE_VERSION \
+    && nvm alias default $NODE_VERSION"
 
-# Installing basic packages
-RUN apt-get update && \
-    apt-get install -y zip unzip curl && \
-    rm -rf /var/lib/apt/lists/* && \
-    rm -rf /tmp/*
+# Install SDKMAN, Java, and Maven
+RUN curl -s "https://get.sdkman.io?rcupdate=false" | bash \
+    && /bin/bash -c "source \"$HOME/.sdkman/bin/sdkman-init.sh\" \
+    && sdk install java $JAVA_VERSION \
+    && sdk install maven $MAVEN_VERSION"
 
-# Switching to non-root user to install SDKMAN!
-USER $USER_UID:$USER_GID
-
-# Create the required directories with correct ownership
-RUN mkdir -p /home/jenkins/.sdkman && \
-    chown -R $USER_UID:$USER_GID /home/jenkins/.sdkman
-
-# Switch back to root temporarily to install SDKMAN!
-USER root
-
-# Downloading SDKMAN!
-RUN curl -s "https://get.sdkman.io" | bash
-
-# Installing Java and Maven, removing some unnecessary SDKMAN files
-USER $USER_UID:$USER_GID
-RUN bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && \
-    yes | sdk install java $JAVA_VERSION && \
-    yes | sdk install maven $MAVEN_VERSION && \
-    rm -rf $HOME/.sdkman/archives/* && \
-    rm -rf $HOME/.sdkman/tmp/*"
 
 # Set environment variables
-ENV MAVEN_HOME="/home/jenkins/.sdkman/candidates/maven/current"
-ENV JAVA_HOME="/home/jenkins/.sdkman/candidates/java/current"
-ENV PATH="$MAVEN_HOME/bin:$JAVA_HOME/bin:$PATH"
+ENV JAVA_HOME="$HOME/.sdkman/candidates/java/current"
+ENV MAVEN_HOME="$HOME/.sdkman/candidates/maven/current"
+ENV NODE_HOME="$HOME/.nvm/versions/node/$NODE_VERSION"
+ENV NPM_HOME="$NODE_HOME/lib/node_modules"
+
+# Combine the specified PATH components
+ENV PATH="$MAVEN_HOME/bin:$JAVA_HOME/bin:$NODE_HOME/bin:$NPM_HOME/bin:/root/.sdkman/candidates/java/current/bin:/root/.sdkman/candidates/maven/current/bin:/root/.nvm/versions/node/v$NODE_VERSION/bin:/.sdkman/candidates/java/current/bin:/.sdkman/candidates/maven/current/bin:/.nvm/versions/node/$NODE_VERSION/bin:/.nvm/versions/node/$NODE_VERSION/lib/node_modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
