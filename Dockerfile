@@ -20,10 +20,10 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | b
     && nvm alias default $NODE_VERSION"
 
 # Install SDKMAN, Java, and Maven
-RUN curl -s "https://get.sdkman.io?rcupdate=false" | bash \
-    && /bin/bash -c "source \"$HOME/.sdkman/bin/sdkman-init.sh\" \
-    && sdk install java $JAVA_VERSION \
-    && sdk install maven $MAVEN_VERSION"
+#RUN curl -s "https://get.sdkman.io?rcupdate=false" | bash \
+#    && /bin/bash -c "source \"$HOME/.sdkman/bin/sdkman-init.sh\" \
+#    && sdk install java $JAVA_VERSION \
+#    && sdk install maven $MAVEN_VERSION"
 
 
 # Set environment variables
