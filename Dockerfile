@@ -1,19 +1,21 @@
 # Use a Debian-based image with Maven, Node.js, Java, and Maven
 FROM ubuntu:22.04
 
-# Define versions
-ENV NODE_VERSION=14.20.0
-ENV JAVA_VERSION=11.0.22-amzn
-ENV MAVEN_VERSION=3.6.3
+# Define version variables
+ARG NODE_VERSION=14.20.0
+ARG NVM_VERSION=0.39.7
+ARG JAVA_VERSION=11.0.22-amzn
+ARG MAVEN_VERSION=3.6.3
+ARG YQ_VERSION=4.13.4
 
 # Install necessary packages
 RUN apt-get update \
-    && apt-get install -y curl wget unzip zip \
+    && apt-get install -y curl wget unzip zip git jq \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Install NVM and Node.js
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash \
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v$NVM_VERSION/install.sh | bash \
     && /bin/bash -c "source \"$HOME/.nvm/nvm.sh\" \
     && nvm install $NODE_VERSION \
     && nvm use $NODE_VERSION \
@@ -25,6 +27,9 @@ RUN curl -s "https://get.sdkman.io" | bash \
     && sdk install java $JAVA_VERSION \
     && sdk install maven $MAVEN_VERSION"
 
+# Install yq
+RUN wget "https://github.com/mikefarah/yq/releases/download/v$YQ_VERSION/yq_linux_amd64" -O /usr/bin/yq && \
+    chmod +x /usr/bin/yq
 
 # Set environment variables
 ENV JAVA_HOME="$HOME/.sdkman/candidates/java/current"
