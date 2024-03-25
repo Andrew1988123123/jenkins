@@ -19,8 +19,7 @@ pipeline {
 
         stage('Run sdkman') {
             steps {
-                sh 'cat /root/.bashrc'
-                sh 'sdk version'
+                sh 'java -version'
             }
         }
 
