@@ -44,7 +44,7 @@ pipeline {
                              --verbosity=info \
                              --log-format=color \
                              --log-timestamp=true \
-                             --destination=${DOCKER_REGISTRY}/hello-kaniko:1.0
+                             --destination=${DOCKER_REGISTRY}/sdkman:1.0
                        """
                 }
             }
