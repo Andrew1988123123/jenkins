@@ -64,15 +64,3 @@ ENV MAVEN_HOME=/opt/maven
 ENV NODE_HOME="$HOME/.nvm/versions/node/$NODE_VERSION"
 ENV NPM_HOME="$NODE_HOME/lib/node_modules"
 ENV PATH="$JAVA_HOME/bin:$MAVEN_HOME/bin:$NODE_HOME/bin:$NPM_HOME/bin:/root/.nvm/versions/node/v$NODE_VERSION/bin:/.nvm/versions/node/$NODE_VERSION/bin:/.nvm/versions/node/$NODE_VERSION/lib/node_modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
-
-# Create a non-root user named "jenkins"
-RUN useradd -ms /bin/bash jenkins
-
-# Grant sudo privileges to the "jenkins" user
-RUN echo "jenkins ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-
-USER jenkins
-
-WORKDIR /home/jenkins
-
-CMD ["/bin/bash"]
