@@ -30,7 +30,7 @@ pipeline {
         }
         stage('Set java17 version') {
             steps {
-                sh 'sudo update-java-alternatives --set /usr/lib/jvm/java-17-amazon-corretto'
+                sh 'update-java-alternatives --set /usr/lib/jvm/java-17-amazon-corretto'
                 sh 'java -version'
             }
         }
