@@ -17,15 +17,26 @@ pipeline {
             }
         }
 
-        stage('Run sdkman') {
+        stage('Run java version') {
             steps {
                 sh 'java -version'
             }
         }
 
-        stage('Build version') {
+        stage('Run node version') {
             steps {
                 sh 'node -v'
+            }
+        }
+        stage('Set java17 version') {
+            steps {
+                sh 'sudo update-java-alternatives --set /usr/lib/jvm/java-17-amazon-corretto'
+                sh 'java -version'
+            }
+        }
+        stage('Check java17 version') {
+            steps {
+                sh 'java -version'
             }
         }
     }

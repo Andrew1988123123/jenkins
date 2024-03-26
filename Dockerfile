@@ -6,6 +6,10 @@ ARG NODE_VERSION=14.20.0
 ARG NVM_VERSION=0.39.7
 ARG JAVA_11_VERSION=11
 ARG JAVA_11_CORRETTO_VERSION=$JAVA_11_VERSION.0.22.7
+ARG JAVA_17_VERSION=17
+ARG JAVA_17_CORRETTO_VERSION=$JAVA_17_VERSION.0.10.7
+ARG JAVA_21_VERSION=21
+ARG JAVA_21_CORRETTO_VERSION=$JAVA_21_VERSION.0.2.13
 ARG MAVEN_VERSION=3.6.3
 ARG YQ_VERSION=4.13.4
 
@@ -28,6 +32,27 @@ RUN apt-get update && \
     curl -O https://corretto.aws/downloads/resources/$JAVA_11_CORRETTO_VERSION.1/java-$JAVA_11_VERSION-amazon-corretto-jdk_$JAVA_11_CORRETTO_VERSION-1_amd64.deb && \
     dpkg --install java-$JAVA_11_VERSION-amazon-corretto-jdk_$JAVA_11_CORRETTO_VERSION-1_amd64.deb && \
     rm java-$JAVA_11_VERSION-amazon-corretto-jdk_$JAVA_11_CORRETTO_VERSION-1_amd64.deb
+
+# Install Java 11
+RUN apt-get update && \
+    mkdir -p /usr/lib/jvm/java && \
+    curl -O https://corretto.aws/downloads/resources/$JAVA_17_CORRETTO_VERSION.1/java-$JAVA_17_VERSION-amazon-corretto-jdk_$JAVA_17_CORRETTO_VERSION-1_amd64.deb && \
+    dpkg --install java-$JAVA_17_VERSION-amazon-corretto-jdk_$JAVA_17_CORRETTO_VERSION-1_amd64.deb && \
+    rm java-$JAVA_17_VERSION-amazon-corretto-jdk_$JAVA_17_CORRETTO_VERSION-1_amd64.deb
+
+# Install Java 17
+RUN apt-get update && \
+    mkdir -p /usr/lib/jvm/java && \
+    curl -O https://corretto.aws/downloads/resources/$JAVA_17_CORRETTO_VERSION.1/java-$JAVA_17_VERSION-amazon-corretto-jdk_$JAVA_17_CORRETTO_VERSION-1_amd64.deb && \
+    dpkg --install java-$JAVA_17_VERSION-amazon-corretto-jdk_$JAVA_17_CORRETTO_VERSION-1_amd64.deb && \
+    rm java-$JAVA_17_VERSION-amazon-corretto-jdk_$JAVA_17_CORRETTO_VERSION-1_amd64.deb
+
+# Install Java 21
+RUN apt-get update && \
+    mkdir -p /usr/lib/jvm/java && \
+    curl -O https://corretto.aws/downloads/resources/$JAVA_21_CORRETTO_VERSION.1/java-$JAVA_21_VERSION-amazon-corretto-jdk_$JAVA_21_CORRETTO_VERSION-1_amd64.deb && \
+    dpkg --install java-$JAVA_21_VERSION-amazon-corretto-jdk_$JAVA_21_CORRETTO_VERSION-1_amd64.deb && \
+    rm java-$JAVA_21_VERSION-amazon-corretto-jdk_$JAVA_21_CORRETTO_VERSION-1_amd64.deb
 
 # Install Maven
 RUN wget "https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" -O /tmp/apache-maven.tar.gz \
