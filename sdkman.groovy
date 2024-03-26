@@ -30,8 +30,11 @@ pipeline {
         }
         stage('Set java17 version') {
             steps {
-                sh 'update-java-alternatives --set /usr/lib/jvm/java-17-amazon-corretto'
-                sh 'java -version'
+                container('sdkman') {
+                    sh 'update-java-alternatives --set /usr/lib/jvm/java-17-amazon-corretto'
+                    sh 'java -version'
+                }
+
             }
         }
         stage('Check java17 version') {
