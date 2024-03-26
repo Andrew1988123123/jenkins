@@ -15,7 +15,7 @@ ARG YQ_VERSION=4.13.4
 
 # Install necessary packages
 RUN apt-get update \
-    && apt-get install -y curl wget unzip zip git jq gnupg2 sudo \
+    && apt-get install -y bash curl wget unzip zip git jq gnupg2 sudo \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
