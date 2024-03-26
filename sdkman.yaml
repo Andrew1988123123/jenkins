@@ -4,6 +4,9 @@ metadata:
   name: sdkman
   namespace: jenkins
 spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
   containers:
     - name: sdkman
       image: 74734589924/sdkman:1.0

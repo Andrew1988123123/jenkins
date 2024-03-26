@@ -15,7 +15,7 @@ ARG YQ_VERSION=4.13.4
 
 # Install necessary packages
 RUN apt-get update \
-    && apt-get install -y curl wget unzip zip git jq gnupg2 \
+    && apt-get install -y curl wget unzip zip git jq gnupg2 sudo \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -26,19 +26,13 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v$NVM_VERSION/install.
     && nvm use $NODE_VERSION \
     && nvm alias default $NODE_VERSION"
 
+# Install Java 11
 RUN apt-get update && \
     apt-get install -y java-common && \
     mkdir -p /usr/lib/jvm/java && \
     curl -O https://corretto.aws/downloads/resources/$JAVA_11_CORRETTO_VERSION.1/java-$JAVA_11_VERSION-amazon-corretto-jdk_$JAVA_11_CORRETTO_VERSION-1_amd64.deb && \
     dpkg --install java-$JAVA_11_VERSION-amazon-corretto-jdk_$JAVA_11_CORRETTO_VERSION-1_amd64.deb && \
     rm java-$JAVA_11_VERSION-amazon-corretto-jdk_$JAVA_11_CORRETTO_VERSION-1_amd64.deb
-
-# Install Java 11
-RUN apt-get update && \
-    mkdir -p /usr/lib/jvm/java && \
-    curl -O https://corretto.aws/downloads/resources/$JAVA_17_CORRETTO_VERSION.1/java-$JAVA_17_VERSION-amazon-corretto-jdk_$JAVA_17_CORRETTO_VERSION-1_amd64.deb && \
-    dpkg --install java-$JAVA_17_VERSION-amazon-corretto-jdk_$JAVA_17_CORRETTO_VERSION-1_amd64.deb && \
-    rm java-$JAVA_17_VERSION-amazon-corretto-jdk_$JAVA_17_CORRETTO_VERSION-1_amd64.deb
 
 # Install Java 17
 RUN apt-get update && \
@@ -70,3 +64,15 @@ ENV MAVEN_HOME=/opt/maven
 ENV NODE_HOME="$HOME/.nvm/versions/node/$NODE_VERSION"
 ENV NPM_HOME="$NODE_HOME/lib/node_modules"
 ENV PATH="$JAVA_HOME/bin:$MAVEN_HOME/bin:$NODE_HOME/bin:$NPM_HOME/bin:/root/.nvm/versions/node/v$NODE_VERSION/bin:/.nvm/versions/node/$NODE_VERSION/bin:/.nvm/versions/node/$NODE_VERSION/lib/node_modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
+
+# Create a non-root user named "jenkins"
+RUN useradd -ms /bin/bash jenkins
+
+# Grant sudo privileges to the "jenkins" user
+RUN echo "jenkins ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+USER jenkins
+
+WORKDIR /home/jenkins
+
+CMD ["/bin/bash"]
