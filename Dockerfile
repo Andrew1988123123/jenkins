@@ -21,15 +21,20 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v$NVM_VERSION/install.
     && nvm use $NODE_VERSION \
     && nvm alias default $NODE_VERSION"
 
+# Install yq
+RUN wget "https://github.com/mikefarah/yq/releases/download/v$YQ_VERSION/yq_linux_amd64" -O /usr/bin/yq && \
+    chmod +x /usr/bin/yq
+
+RUN useradd -m jvm_user && \
+    mkdir -p /etc/sudoers.d && \
+    echo 'jvm_user ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers.d/jvm_user
+
+USER jvm_user
 # Install SDKMAN, Java, and Maven
 RUN curl -s "https://get.sdkman.io" | bash \
     && /bin/bash -c "source \"$HOME/.sdkman/bin/sdkman-init.sh\" \
     && sdk install java $JAVA_VERSION \
     && sdk install maven $MAVEN_VERSION"
-
-# Install yq
-RUN wget "https://github.com/mikefarah/yq/releases/download/v$YQ_VERSION/yq_linux_amd64" -O /usr/bin/yq && \
-    chmod +x /usr/bin/yq
 
 # Set environment variables
 ENV JAVA_HOME="$HOME/.sdkman/candidates/java/current"
