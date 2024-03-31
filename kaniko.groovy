@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Run git') {
             steps {
-                git url: 'https://github.com/Andrew1988123123/jenkins.git', branch: 'master'
+                git url: 'https://github.com/Andrew1988123123/jenkins.git', branch: 'java-apt'
                 container('maven') {
                     sh 'echo `pwd`'
                 }
@@ -44,7 +44,7 @@ pipeline {
                              --verbosity=info \
                              --log-format=color \
                              --log-timestamp=true \
-                             --destination=${DOCKER_REGISTRY}/sdkman:1.0
+                             --destination=${DOCKER_REGISTRY}/java-apt:1.0
                        """
                 }
             }
