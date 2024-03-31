@@ -1,4 +1,3 @@
-# Use a Debian-based image
 FROM ubuntu:22.04
 
 # Define version variables
@@ -15,64 +14,28 @@ ARG YQ_VERSION=4.13.4
 
 # Install necessary packages
 RUN apt-get update \
-    && apt-get install -y bash curl wget unzip zip git jq gnupg2 sudo java-common \
+    && apt-get install -y vim bash curl wget unzip zip git jq gnupg2 java-common \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Java
 RUN apt-get update && \
     apt-get install -y openjdk-11-jdk && \
     apt-get install -y openjdk-17-jdk && \
     apt-get install -y openjdk-21-jdk
-# Install NVM and Node.js
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v$NVM_VERSION/install.sh | bash \
-    && /bin/bash -c "source \"$HOME/.nvm/nvm.sh\" \
-    && nvm install $NODE_VERSION \
-    && nvm use $NODE_VERSION \
-    && nvm alias default $NODE_VERSION"
-
-## Install Java 11
-#RUN apt-get update && \
-#    apt-get install -y \
-#        wget \
-#        gnupg && \
-#    wget -q -O - https://apt.corretto.aws/corretto.key | gpg --dearmor --batch -o /usr/share/keyrings/corretto-keyring.gpg && \
-#    echo "deb [signed-by=/usr/share/keyrings/corretto-keyring.gpg] https://apt.corretto.aws stable main" | tee /etc/apt/sources.list.d/corretto.list && \
-#    apt-get update && \
-#    apt-get install -y \
-#        java-$JAVA_11_VERSION-amazon-corretto-jdk && \
-#    rm -rf /var/lib/apt/lists/*
-#
-## Install Java 17
-#RUN apt-get update && \
-#    apt-get install -y \
-#        wget \
-#        gnupg && \
-#    wget -q -O /tmp/corretto.key https://apt.corretto.aws/corretto.key && \
-#    gpg --import /tmp/corretto.key && \
-#    echo "deb [signed-by=/usr/share/keyrings/corretto-keyring.gpg] https://apt.corretto.aws stable main" | tee /etc/apt/sources.list.d/corretto.list && \
-#    apt-get update && \
-#    apt-get install -y \
-#        java-$JAVA_17_VERSION-amazon-corretto-jdk && \
-#    rm -rf /var/lib/apt/lists/*
-##
-## Install Java 21
-#RUN apt-get update && \
-#    apt-get install -y \
-#        wget \
-#        gnupg && \
-#    wget -q -O /tmp/corretto21.key https://apt.corretto.aws/corretto.key && \
-#    gpg --import /tmp/corretto21.key && \
-#    echo "deb [signed-by=/usr/share/keyrings/corretto-keyring.gpg] https://apt.corretto.aws stable main" | tee /etc/apt/sources.list.d/corretto.list && \
-#    apt-get update && \
-#    apt-get install -y \
-#        java-$JAVA_21_VERSION-amazon-corretto-jdk && \
-#    rm -rf /var/lib/apt/lists/*
 
 # Install Maven
 RUN wget "https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" -O /tmp/apache-maven.tar.gz \
     && tar xzf /tmp/apache-maven.tar.gz -C /opt \
     && ln -s /opt/apache-maven-$MAVEN_VERSION /opt/maven \
     && rm /tmp/apache-maven.tar.gz
+
+# Install NVM and Node.js
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v$NVM_VERSION/install.sh | bash \
+    && /bin/bash -c "source \"$HOME/.nvm/nvm.sh\" \
+    && nvm install $NODE_VERSION \
+    && nvm use $NODE_VERSION \
+    && nvm alias default $NODE_VERSION"
 
 # Install yq
 RUN wget "https://github.com/mikefarah/yq/releases/download/v$YQ_VERSION/yq_linux_amd64" -O /usr/bin/yq \
