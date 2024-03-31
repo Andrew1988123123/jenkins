@@ -15,10 +15,14 @@ ARG YQ_VERSION=4.13.4
 
 # Install necessary packages
 RUN apt-get update \
-    && apt-get install -y bash curl wget unzip zip git jq gnupg2 sudo \
+    && apt-get install -y bash curl wget unzip zip git jq gnupg2 sudo java-common \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && \
+    apt-get install -y openjdk-11-jdk && \
+    apt-get install -y openjdk-17-jdk && \
+    apt-get install -y openjdk-21-jdk
 # Install NVM and Node.js
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v$NVM_VERSION/install.sh | bash \
     && /bin/bash -c "source \"$HOME/.nvm/nvm.sh\" \
@@ -26,27 +30,43 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v$NVM_VERSION/install.
     && nvm use $NODE_VERSION \
     && nvm alias default $NODE_VERSION"
 
-# Install Java 11
-RUN apt-get update && \
-    apt-get install -y java-common && \
-    mkdir -p /usr/lib/jvm/java && \
-    curl -O https://corretto.aws/downloads/resources/$JAVA_11_CORRETTO_VERSION.1/java-$JAVA_11_VERSION-amazon-corretto-jdk_$JAVA_11_CORRETTO_VERSION-1_amd64.deb && \
-    dpkg --install java-$JAVA_11_VERSION-amazon-corretto-jdk_$JAVA_11_CORRETTO_VERSION-1_amd64.deb && \
-    rm java-$JAVA_11_VERSION-amazon-corretto-jdk_$JAVA_11_CORRETTO_VERSION-1_amd64.deb
-
-# Install Java 17
-RUN apt-get update && \
-    mkdir -p /usr/lib/jvm/java && \
-    curl -O https://corretto.aws/downloads/resources/$JAVA_17_CORRETTO_VERSION.1/java-$JAVA_17_VERSION-amazon-corretto-jdk_$JAVA_17_CORRETTO_VERSION-1_amd64.deb && \
-    dpkg --install java-$JAVA_17_VERSION-amazon-corretto-jdk_$JAVA_17_CORRETTO_VERSION-1_amd64.deb && \
-    rm java-$JAVA_17_VERSION-amazon-corretto-jdk_$JAVA_17_CORRETTO_VERSION-1_amd64.deb
-
-# Install Java 21
-RUN apt-get update && \
-    mkdir -p /usr/lib/jvm/java && \
-    curl -O https://corretto.aws/downloads/resources/$JAVA_21_CORRETTO_VERSION.1/java-$JAVA_21_VERSION-amazon-corretto-jdk_$JAVA_21_CORRETTO_VERSION-1_amd64.deb && \
-    dpkg --install java-$JAVA_21_VERSION-amazon-corretto-jdk_$JAVA_21_CORRETTO_VERSION-1_amd64.deb && \
-    rm java-$JAVA_21_VERSION-amazon-corretto-jdk_$JAVA_21_CORRETTO_VERSION-1_amd64.deb
+## Install Java 11
+#RUN apt-get update && \
+#    apt-get install -y \
+#        wget \
+#        gnupg && \
+#    wget -q -O - https://apt.corretto.aws/corretto.key | gpg --dearmor --batch -o /usr/share/keyrings/corretto-keyring.gpg && \
+#    echo "deb [signed-by=/usr/share/keyrings/corretto-keyring.gpg] https://apt.corretto.aws stable main" | tee /etc/apt/sources.list.d/corretto.list && \
+#    apt-get update && \
+#    apt-get install -y \
+#        java-$JAVA_11_VERSION-amazon-corretto-jdk && \
+#    rm -rf /var/lib/apt/lists/*
+#
+## Install Java 17
+#RUN apt-get update && \
+#    apt-get install -y \
+#        wget \
+#        gnupg && \
+#    wget -q -O /tmp/corretto.key https://apt.corretto.aws/corretto.key && \
+#    gpg --import /tmp/corretto.key && \
+#    echo "deb [signed-by=/usr/share/keyrings/corretto-keyring.gpg] https://apt.corretto.aws stable main" | tee /etc/apt/sources.list.d/corretto.list && \
+#    apt-get update && \
+#    apt-get install -y \
+#        java-$JAVA_17_VERSION-amazon-corretto-jdk && \
+#    rm -rf /var/lib/apt/lists/*
+##
+## Install Java 21
+#RUN apt-get update && \
+#    apt-get install -y \
+#        wget \
+#        gnupg && \
+#    wget -q -O /tmp/corretto21.key https://apt.corretto.aws/corretto.key && \
+#    gpg --import /tmp/corretto21.key && \
+#    echo "deb [signed-by=/usr/share/keyrings/corretto-keyring.gpg] https://apt.corretto.aws stable main" | tee /etc/apt/sources.list.d/corretto.list && \
+#    apt-get update && \
+#    apt-get install -y \
+#        java-$JAVA_21_VERSION-amazon-corretto-jdk && \
+#    rm -rf /var/lib/apt/lists/*
 
 # Install Maven
 RUN wget "https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" -O /tmp/apache-maven.tar.gz \
@@ -59,8 +79,11 @@ RUN wget "https://github.com/mikefarah/yq/releases/download/v$YQ_VERSION/yq_linu
     && chmod +x /usr/bin/yq
 
 # Set environment variables
-ENV JAVA_HOME=/usr/lib/jvm/java-$JAVA_11_VERSION-amazon-corretto
+#ENV JAVA_HOME=/usr/lib/jvm/java-$JAVA_11_VERSION-amazon-corretto
+ENV JAVA_HOME=/usr/lib/jvm/java-1.$JAVA_11_VERSION.0-openjdk-amd64
+ENV JAVA_HOME17=/usr/lib/jvm/java-1.$JAVA_17_VERSION.0-openjdk-amd64
+ENV JAVA_HOME21=/usr/lib/jvm/java-1.$JAVA_21_VERSION.0-openjdk-amd64
 ENV MAVEN_HOME=/opt/maven
 ENV NODE_HOME="$HOME/.nvm/versions/node/$NODE_VERSION"
 ENV NPM_HOME="$NODE_HOME/lib/node_modules"
-ENV PATH="$JAVA_HOME/bin:$MAVEN_HOME/bin:$NODE_HOME/bin:$NPM_HOME/bin:/root/.nvm/versions/node/v$NODE_VERSION/bin:/.nvm/versions/node/$NODE_VERSION/bin:/.nvm/versions/node/$NODE_VERSION/lib/node_modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
+ENV PATH="$JAVA_HOME/bin:$JAVA_HOME17/bin:$JAVA_HOME21/bin:$MAVEN_HOME/bin:$NODE_HOME/bin:$NPM_HOME/bin:/root/.nvm/versions/node/v$NODE_VERSION/bin:/.nvm/versions/node/$NODE_VERSION/bin:/.nvm/versions/node/$NODE_VERSION/lib/node_modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
