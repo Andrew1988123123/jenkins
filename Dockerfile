@@ -34,11 +34,14 @@ RUN wget "https://github.com/mikefarah/yq/releases/download/v$YQ_VERSION/yq_linu
     chmod +x /usr/bin/yq
 
 # Install SDKMAN, Java, and Maven
-RUN curl -s "https://get.sdkman.io" | bash && source /root/.zshrc && \
+RUN curl -s "https://get.sdkman.io" | bash && \
+    source "/root/.sdkman/bin/sdkman-init.sh" && \
     sdk install java $JAVA_11_CORRETTO_VERSION && \
     sdk install java $JAVA_17_CORRETTO_VERSION && \
     sdk install java $JAVA_21_CORRETTO_VERSION && \
-    sdk install maven $MAVEN_VERSION
+    sdk install maven $MAVEN_VERSION && \
+    echo "yes" | sdk default java $JAVA_11_CORRETTO_VERSION
+
 
 # Set environment variables
 ENV JAVA_HOME="$HOME/.sdkman/candidates/java/current"

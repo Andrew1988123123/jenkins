@@ -3,6 +3,8 @@ kind: Pod
 metadata:
   name: sdkman
   namespace: jenkins
+  labels:
+    some-label: some-label-value
 spec:
   securityContext:
     runAsUser: 1000
@@ -10,24 +12,8 @@ spec:
   containers:
     - name: sdkman
       image: 74734589924/sdkman:1.0
+#      ttyEnabled: true
       command:
         - sleep
       args:
         - "99d"
-    - name: kaniko
-      image: gcr.io/kaniko-project/executor:debug
-      command:
-        - sleep
-      args:
-        - "9999999"
-      volumeMounts:
-        - name: kaniko-secret
-          mountPath: /kaniko/.docker
-  restartPolicy: Never
-  volumes:
-    - name: kaniko-secret
-      secret:
-        secretName: docker-registry
-        items:
-          - key: .dockerconfigjson
-            path: config.json
