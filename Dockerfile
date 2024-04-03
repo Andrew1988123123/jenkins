@@ -9,10 +9,6 @@ ARG NODE_VERSION=14.20.0
 ARG NVM_VERSION=0.39.7
 ARG YQ_VERSION=4.13.4
 
-ENV SHELL=/bin/bash
-
-SHELL ["/bin/bash", "-c"]
-
 # Install necessary packages
 RUN apt-get update \
     && apt-get install -y sudo curl wget unzip zip git jq \
@@ -37,7 +33,6 @@ RUN curl -s "https://get.sdkman.io" | bash && \
     sdk install java $JAVA_17_CORRETTO_VERSION && \
     sdk install java $JAVA_21_CORRETTO_VERSION && \
     sdk install maven $MAVEN_VERSION && \
-    source /root/.zshrc && \
     echo "yes" | sdk default java $JAVA_11_CORRETTO_VERSION
 
 
