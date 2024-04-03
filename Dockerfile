@@ -40,6 +40,7 @@ RUN curl -s "https://get.sdkman.io" | bash && \
     sdk install java $JAVA_17_CORRETTO_VERSION && \
     sdk install java $JAVA_21_CORRETTO_VERSION && \
     sdk install maven $MAVEN_VERSION && \
+    source /root/.zshrc && \
     echo "yes" | sdk default java $JAVA_11_CORRETTO_VERSION
 
 
