@@ -15,7 +15,7 @@ SHELL ["/bin/bash", "-c"]
 
 # Install necessary packages
 RUN apt-get update \
-    && apt-get install -y sudo curl wget unzip zip git jq \
+    && apt-get install -y sudo curl wget unzip zip git jq fonts-dejavu fontconfig\
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
