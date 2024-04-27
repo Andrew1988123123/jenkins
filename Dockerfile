@@ -37,7 +37,8 @@ RUN curl -s "https://get.sdkman.io" | bash && \
     sdk install java $JAVA_17_CORRETTO_VERSION && \
     sdk install java $JAVA_21_CORRETTO_VERSION && \
     sdk install maven $MAVEN_VERSION && \
-    echo "yes" | sdk default java $JAVA_11_CORRETTO_VERSION
+    echo "yes" | sdk default java $JAVA_11_CORRETTO_VERSION && \
+    echo sdkman_auto_answer=true >> ~/.sdkman/etc/config
 
 # Set environment variables
 ENV JAVA_HOME="$HOME/.sdkman/candidates/java/current"
