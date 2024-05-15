@@ -112,7 +112,7 @@ spec:
                              --verbosity=info \
                              --log-format=color \
                              --log-timestamp=true \
-                             --destination=74734589924/sdkman:latest
+                             --destination=74734589924/sdkman:2.0
                       """
                 }
             }
