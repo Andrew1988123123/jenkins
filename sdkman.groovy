@@ -15,7 +15,7 @@ spec:
     runAsGroup: 0
   containers:
     - name: sdkman
-      image: 74734589924/sdkman:1.0
+      image: 74734589924/sdkman:2.0
       command:
         - sleep
       args:
@@ -112,7 +112,7 @@ spec:
                              --verbosity=info \
                              --log-format=color \
                              --log-timestamp=true \
-                             --destination=74734589924/sdkman:2.0
+                             --destination=74734589924/sdkman:latest
                       """
                 }
             }
