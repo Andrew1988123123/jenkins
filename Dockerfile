@@ -6,6 +6,7 @@ ARG JAVA_17_CORRETTO_VERSION=17.0.10-amzn
 ARG JAVA_21_CORRETTO_VERSION=21.0.2-amzn
 ARG MAVEN_VERSION=3.6.3
 ARG NODE_VERSION=14.20.0
+ARG NODE_18_VERSION=18.19.1
 ARG NVM_VERSION=0.39.7
 ARG YQ_VERSION=4.13.4
 
@@ -23,6 +24,7 @@ RUN apt-get update \
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v$NVM_VERSION/install.sh | bash \
     && /bin/bash -c "source \"$HOME/.nvm/nvm.sh\" \
     && nvm install $NODE_VERSION \
+    && nvm install $NODE_18_VERSION \
     && nvm use $NODE_VERSION \
     && nvm alias default $NODE_VERSION"
 
