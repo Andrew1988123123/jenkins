@@ -96,6 +96,8 @@ spec:
                 java -version
                 mvn -v
                 node -v
+                nvm use 18.19.1
+                node -v
                 '''
             }
         }
