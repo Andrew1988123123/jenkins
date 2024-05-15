@@ -93,6 +93,7 @@ spec:
             steps {
                 sh '''#!/bin/bash
                 source /root/.zshrc >/dev/null 2>&1
+                source /root/.bashrc >/dev/null 2>&1
                 java -version
                 mvn -v
                 node -v
