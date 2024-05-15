@@ -15,7 +15,7 @@ spec:
     runAsGroup: 0
   containers:
     - name: sdkman
-      image: 74734589924/sdkman:1.13
+      image: 74734589924/sdkman:1.0
       command:
         - sleep
       args:
