@@ -92,7 +92,7 @@ spec:
         stage('Check java17 version') {
             steps {
                 sh '''#!/bin/bash
-                source /root/.zshrc >/dev/null 2>&1
+//                source /root/.zshrc >/dev/null 2>&1
                 source /root/.nvm/nvm.sh
                 java -version
                 mvn -v
