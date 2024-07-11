@@ -7,14 +7,19 @@ ARG NODE_14_VERSION=14.20.0
 ARG NODE_18_VERSION=18.19.1
 ARG NVM_VERSION=0.39.7
 ARG YQ_VERSION=4.13.4
-
-ENV SHELL=/bin/bash
+ARG DEBIAN_FRONTEND=noninteractive
 
 SHELL ["/bin/bash", "-c"]
 
+ENV SHELL=/bin/bash
+ENV TZ=Europe/Warsaw
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+
 # Install necessary packages
 RUN apt-get update \
-    && apt-get install -y sudo curl wget unzip zip git jq fonts-dejavu fontconfig\
+    && apt-get install -y sudo curl wget unzip zip git jq fonts-dejavu fontconfig locales locales-all tzdata \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -35,16 +40,12 @@ RUN curl -s "https://get.sdkman.io" | bash && \
     source "/root/.sdkman/bin/sdkman-init.sh" && \
     sdk install java $JAVA_11_CORRETTO_VERSION && \
     sdk install maven $MAVEN_VERSION && \
-    echo "yes" | sdk default java $JAVA_11_CORRETTO_VERSION && \
-    echo sdkman_auto_answer=true >> ~/.sdkman/etc/config \
+    echo "yes" | sdk default java $JAVA_11_CORRETTO_VERSION
 
 # Set environment variables
 ENV JAVA_HOME="$HOME/.sdkman/candidates/java/current"
 ENV MAVEN_HOME="$HOME/.sdkman/candidates/maven/current"
 ENV NODE_HOME="$HOME/.nvm/versions/node/$NODE_18_VERSION"
 ENV NPM_HOME="$NODE_HOME/lib/node_modules"
-
 # Combine the specified PATH components
 ENV PATH="$MAVEN_HOME/bin:$JAVA_HOME/bin:$NODE_HOME/bin:$NPM_HOME/bin:/root/.nvm/versions/node/v$NODE_18_VERSION/bin:/.nvm/versions/node/$NODE_18_VERSION/bin:/.nvm/versions/node/$NODE_18_VERSION/lib/node_modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:$PATH"
-RUN npx puppeteer browsers install chrome -y
-RUN /bin/bash -c "node -v"
